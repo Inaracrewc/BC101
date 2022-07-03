@@ -1,0 +1,39 @@
+// SPDX-License-Identifier: MIT
+// Smart contract that creates a simple NFTs based on an on-chain stored metadata image
+pragma solidity ^0.8.1;
+
+// We first import some OpenZeppelin Contracts.
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
+import "hardhat/console.sol";
+
+// We inherit the contract we imported. This means we'll have access
+// to the inherited contract's methods.
+contract MySecondNFT is ERC721URIStorage {
+  // Magic given to us by OpenZeppelin to help us keep track of tokenIds.
+  using Counters for Counters.Counter;
+  Counters.Counter private _tokenIds;
+
+  // We need to pass the name of our NFTs token and its symbol.
+  constructor() ERC721 ("MySecondNFT", "MY2NDNFT") {
+    console.log("This is my second NFT contract. Woah!");
+  }
+
+  // A function our user will hit to get their NFT.
+  function mintNFT() public {
+     // Get the current tokenId, this starts at 0.
+    uint256 newItemId = _tokenIds.current();
+
+     // Actually mint the NFT to the sender using msg.sender.
+    _safeMint(msg.sender, newItemId);
+    console.log("An NFT w/ ID %s has been minted to %s", newItemId, msg.sender);
+
+    // Set the NFTs data.
+  _setTokenURI(newItemId,"data:application/json;base64,ewogICJuYW1lIjogIkRPR0dZIEZPR0dZIE5GVCIsCiAgImRlc2NyaXB0aW9uIjogIkFuIE5GVCBhcyBwbGFpbiBhbmQgc2ltcGxlIGFzIGVwaWMiLAogICJpbWFnZSI6ICJkYXRhOmltYWdlL3N2Zyt4bWw7YmFzZTY0LFBITjJaeUI0Yld4dWN6MGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TUM5emRtY2lJSEJ5WlhObGNuWmxRWE53WldOMFVtRjBhVzg5SW5oTmFXNVpUV2x1SUcxbFpYUWlJSFpwWlhkQ2IzZzlJakFnTUNBeU1EQWdNakF3SWo0S0lDQWdJRHh6ZEhsc1pUNHVZbUZ6WlNCN0lHWnBiR3c2SUhkb2FYUmxPeUJtYjI1MExXWmhiV2xzZVRvZ2MyVnlhV1k3SUdadmJuUXRjMmw2WlRvZ01UUndlRHNnZlR3dmMzUjViR1UrQ2lBZ0lDQThjbVZqZENCM2FXUjBhRDBpTVRBd0pTSWdhR1ZwWjJoMFBTSXhNREFsSWlCbWFXeHNQU0p3YVc1cklpQXZQZ29nSUNBZ1BIUmxlSFFnZUQwaU5UQWxJaUI1UFNJMU1DVWlJR05zWVhOelBTSmlZWE5sSWlCa2IyMXBibUZ1ZEMxaVlYTmxiR2x1WlQwaWJXbGtaR3hsSWlCMFpYaDBMV0Z1WTJodmNqMGliV2xrWkd4bElqNUVUMGRIV1NCR1QwZEhXU0JPUmxROEwzUmxlSFErQ2p3dmMzWm5QZz09IgoKfQ==");
+
+
+
+    // Increment the counter for when the next NFT is minted.
+    _tokenIds.increment();
+  }
+}
